@@ -116,21 +116,21 @@ const getAllICAO = () => {
 const horaUTC = new Date().getUTCHours();
 let horas_inicio, horas_meio, horas_fim;
 if(horaUTC < 9){
-    horas_inicio = '09:00 - 11:00';
-    horas_meio = '11:00 - 13:00';
-    horas_fim = '13:00 - 15:00';
+    horas_inicio = '09:00-11:00';
+    horas_meio = '11:00-13:00';
+    horas_fim = '13:00-15:00';
 }else if(horaUTC < 15){
-    horas_inicio = '15:00 - 17:00';
-    horas_meio = '17:00 - 19:00';
-    horas_fim = '19:00 - 21:00';
+    horas_inicio = '15:00-17:00';
+    horas_meio = '17:00-19:00';
+    horas_fim = '19:00-21:00';
 }else if(horaUTC < 21){
-    horas_inicio = '21:00 - 23:00';
-    horas_meio = '23:00 - 01:00';
-    horas_fim = '01:00 - 03:00';
+    horas_inicio = '21:00-23:00';
+    horas_meio = '23:00-01:00';
+    horas_fim = '01:00-03:00';
 }else{
-    horas_inicio = '03:00 - 05:00';
-    horas_meio = '05:00 - 07:00';
-    horas_fim = '07:00 - 09:00';
+    horas_inicio = '03:00-05:00';
+    horas_meio = '05:00-07:00';
+    horas_fim = '07:00-09:00';
 }
 
 function getData(url) {
@@ -185,26 +185,6 @@ const gerarCampos = function () {
             input_inicio.id = GRUPOS[i][1][j]+'_inicio';
             input_inicio.setAttribute('placeholder','Início');
             div.appendChild(input_inicio);
-            // let meteorologia_inicio = document.createElement('span');
-            // let seletor_tsra = document.createElement('input');
-            // seletor_tsra.type = 'checkbox';
-            // meteorologia_inicio.appendChild(seletor_tsra);
-            // let label_tsra = document.createElement('label');
-            // label_tsra.textContent = 'TSRA'
-            // meteorologia_inicio.appendChild(label_tsra);
-            // let seletor_ts = document.createElement('input');
-            // seletor_ts.type = 'checkbox';
-            // meteorologia_inicio.appendChild(seletor_ts);
-            // let label_ts = document.createElement('label');
-            // label_ts.textContent = 'TS'
-            // meteorologia_inicio.appendChild(label_ts);
-            // let seletor_ra = document.createElement('input');
-            // seletor_ra.type = 'checkbox';
-            // meteorologia_inicio.appendChild(seletor_ra);
-            // let label_ra = document.createElement('label');
-            // label_ra.textContent = 'RA'
-            // meteorologia_inicio.appendChild(label_ra);
-            // div.appendChild(meteorologia_inicio);
             div.appendChild(document.createElement("br"));
             let label_meio = document.createElement('label');
             label_meio.classList.add('horarios');
@@ -307,7 +287,7 @@ const imprimePeriodo = function (periodo) {
     if (periodo === 'inicio') horarios = horas_inicio;
     if (periodo === 'meio') horarios = horas_meio;
     if (periodo === 'fim') horarios = horas_fim;
-    horarios = horarios.replace('-','UTC ÀS');
+    horarios = horarios.replace('-',' UTC ÀS ');
     th2.textContent = 'PREVISÕES - ' + horarios + ' UTC';
     cabecalho.appendChild(th2);
     let aviso = document.createElement('p');
