@@ -63,6 +63,12 @@ input[type="checkbox"]{
     margin-right: 10px;
 }
 
+.aviso_de_responsabilidade{
+    font-size: 11px;
+    width: 100%;
+    text-align: center;
+}
+
 #btnImprimeBriefing {
     margin: 30px;
 }
@@ -89,6 +95,7 @@ table {
 
 th, td{
     padding: 5px;
+    text-align: center;
 }
 
 .abr > tr > th {
