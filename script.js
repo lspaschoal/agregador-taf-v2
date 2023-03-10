@@ -307,8 +307,13 @@ const imprimePeriodo = function (periodo) {
     if (periodo === 'inicio') horarios = horas_inicio;
     if (periodo === 'meio') horarios = horas_meio;
     if (periodo === 'fim') horarios = horas_fim;
-    th2.textContent = 'PREVISÕES (' + horarios + ')';
+    horarios = horarios.replace('-','UTC ÀS');
+    th2.textContent = 'PREVISÕES - ' + horarios + ' UTC';
     cabecalho.appendChild(th2);
+    let aviso = document.createElement('p');
+    aviso.textContent = 'PREVISÕES OBTIDAS ATRAVÉS DE PROGNÓSTICOS DIVULGADOS (TAF) E DO PREVISOR DO CGNA, PODENDO HAVER ALTERAÇÕES, AS QUAIS SERÃO INFORMADAS PELA MENSAGEM DE TEMPO REAL';
+    aviso.classList.add('aviso_de_responsabilidade')
+    th2.appendChild(aviso);
     tabela.appendChild(cabecalho);
     // Cria as linhas baseadas em cada grupo. O índice começa em 1 pois pula a chave 'nao_significativa' para gerar a string de
     // "Sem previsão significativa" corretamente
