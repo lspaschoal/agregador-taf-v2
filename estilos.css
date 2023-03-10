@@ -1,0 +1,129 @@
+@font-face {
+    font-family: "Intro Bold";
+    src: url('./fonts/Intro Bold Regular.ttf');
+  }
+
+* {
+    box-sizing: border-box;
+}
+
+.grupos,
+.resultado {
+    width: 100vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.interface{
+    flex-direction: column;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.select{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+input[type="radio"]{
+    width: fit-content;
+}
+
+div,
+fieldset {
+    width: fit-content;
+}
+
+legend {
+    padding: 0.2em 0.5em;
+    border: 1px solid rgb(53, 111, 236);
+    color: rgb(53, 111, 236);
+}
+
+label {
+    display: inline-block;
+    width: 50px;
+    font-family: monospace;
+    font-size: 17px;
+}
+
+input {
+    width: 400px;
+}
+
+input[type="checkbox"]{
+    width: auto;
+}
+
+.horarios{
+    font-size: 10px;
+    width: auto;
+    margin-right: 10px;
+}
+
+#btnImprimeBriefing {
+    margin: 30px;
+}
+
+table {
+    margin: 10px;
+    border: 1px solid;
+    font-size: 25px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.coordenacao > tr > th {
+    background-color: rgb(16, 37, 63);
+    color: white;
+}
+
+.coordenacao > tr:nth-child(odd) {
+    background-color: rgb(233, 237, 244);
+}
+
+.coordenacao > tr:nth-child(even) {
+    background-color: rgb(208, 216, 232);
+}
+
+th, td{
+    padding: 5px;
+}
+
+.abr > tr > th {
+    background-color: rgb(0, 0, 222);
+    color: white;
+    font-family: 'Intro Bold';
+}
+
+.abr > tr:nth-child(odd) {
+    background-color: rgb(222, 235, 247);
+}
+
+.abr > tr:nth-child(even) {
+    background-color: rgb(222, 235, 247);
+}
+
+.coluna_fir{
+    text-align: center;
+}
+
+p {
+    margin: 0;
+}
+
+.div_ad{
+    margin-bottom: 15px;
+}
+.div_taf{
+    width: 500px;
+    font-size: 14px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.label_icao{
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-right: 10px;
+}
