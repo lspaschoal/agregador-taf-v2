@@ -358,10 +358,14 @@ const limpaTabela = function () {
 
 // Escolha de estilo da tabela
 document.getElementById('formato-abr').addEventListener('click', () => {
-    const tabela = document.querySelector('table');
-    tabela.setAttribute('class', 'abr')
+    const tabelas = document.querySelectorAll('table');
+    tabelas.forEach(tabela => {
+        tabela.setAttribute('class', 'abr');
+    });
 });
 document.getElementById('formato-coordenacao').addEventListener('click', () => {
-    const tabela = document.querySelector('table');
-    tabela.setAttribute('class', 'coordenacao')
+    const tabelas = document.querySelectorAll('table');
+    tabelas.forEach(tabela => {
+        tabela.setAttribute('class', 'coordenacao');
+    });
 });
