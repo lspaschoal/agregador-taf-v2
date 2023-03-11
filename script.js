@@ -115,15 +115,15 @@ const getAllICAO = () => {
 
 const horaUTC = new Date().getUTCHours();
 let horas_inicio, horas_meio, horas_fim;
-if(horaUTC < 9){
+if(horaUTC >= 3 && horaUTC < 9){
     horas_inicio = '09:00-11:00';
     horas_meio = '11:00-13:00';
     horas_fim = '13:00-15:00';
-}else if(horaUTC < 15){
+}else if(horaUTC >= 9 && horaUTC < 15){
     horas_inicio = '15:00-17:00';
     horas_meio = '17:00-19:00';
     horas_fim = '19:00-21:00';
-}else if(horaUTC < 21){
+}else if(horaUTC >= 15 && horaUTC < 21){
     horas_inicio = '21:00-23:00';
     horas_meio = '23:00-01:00';
     horas_fim = '01:00-03:00';
