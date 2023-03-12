@@ -145,7 +145,7 @@ function getData(url) {
 
 // Edita os TAFS para exibição
 const tabulaTAF = (taf) => {
-    return taf.replace('TN', '<BR>TN').replaceAll('BECMG', '<BR>BECMG').replaceAll('TEMPO', '<BR>TEMPO').replaceAll('PROB', '<BR>PROB').replaceAll('RMK', '<BR>RMK');
+    return taf.replace('TN', '<BR>TN').replaceAll('BECMG', '<BR>BECMG').replaceAll('TEMPO', '<BR>TEMPO').replaceAll('PROB', '<BR>PROB').replaceAll('RMK', '<BR>RMK').replaceAll('FM', '<BR>FM');
 }
 
 // Gera os campos para inserir a informação
@@ -270,68 +270,423 @@ const gerarBriefing = function (periodo) {
     return briefing;
 }
 
-const imprimePeriodo = function (periodo) {
-    document.getElementById('resultado')
-    // Gera o briefing
-    let briefing = gerarBriefing(periodo);
-    // Cria a tabela para exibição
+// const imprimePeriodo = function (periodo) {
+//     document.getElementById('resultado')
+//     // Gera o briefing
+//     let briefing = gerarBriefing(periodo);
+//     // Cria a tabela para exibição
+//     let tabela = document.createElement('table');
+//     tabela.classList.add('coordenacao');
+//     // Criar cabeçalho
+//     let cabecalho = document.createElement('tr');
+//     let th1 = document.createElement('th');
+//     th1.textContent = 'TMA/FIR';
+//     cabecalho.appendChild(th1);
+//     let th2 = document.createElement('th');
+//     let horarios = '';
+//     if (periodo === 'inicio') horarios = horas_inicio;
+//     if (periodo === 'meio') horarios = horas_meio;
+//     if (periodo === 'fim') horarios = horas_fim;
+//     horarios = horarios.replace('-',' UTC ÀS ');
+//     th2.textContent = 'PREVISÕES - ' + horarios + ' UTC';
+//     cabecalho.appendChild(th2);
+//     let aviso = document.createElement('p');
+//     aviso.textContent = 'PREVISÕES OBTIDAS ATRAVÉS DE PROGNÓSTICOS DIVULGADOS (TAF) E DO PREVISOR DO CGNA, PODENDO HAVER ALTERAÇÕES, AS QUAIS SERÃO INFORMADAS PELA MENSAGEM DE TEMPO REAL';
+//     aviso.classList.add('aviso_de_responsabilidade')
+//     th2.appendChild(aviso);
+//     tabela.appendChild(cabecalho);
+//     // Cria as linhas baseadas em cada grupo. O índice começa em 1 pois pula a chave 'nao_significativa' para gerar a string de
+//     // "Sem previsão significativa" corretamente
+//     for (let i = 0; i < GRUPOS.length; i++) {
+//         // nova linha
+//         let tr = document.createElement('tr');
+//         tabela.appendChild(tr);
+//         // celula com o nome do grupo
+//         let td1 = document.createElement('td');
+//         td1.classList.add('coluna_fir')
+//         let grupo = GRUPOS[i][0].toUpperCase();
+//         td1.textContent = grupo;
+//         tr.appendChild(td1);
+//         // celula com a condição meteorológica
+//         let td2 = document.createElement('td');
+//         let condicoes_localidades = Object.entries(briefing[GRUPOS[i][0]]);
+//         for (let j = 0; j < condicoes_localidades.length; j++) {
+//             if (condicoes_localidades[j][0] === 'nao_significativa' && condicoes_localidades[j][1].length === 0) continue
+//             let p = document.createElement('p');
+//             (condicoes_localidades[j][0] === 'nao_significativa') ? p.textContent = 'Sem previsão significativa para ': p.textContent = 'Previsão de ' + condicoes_localidades[j][0] + ' para ';
+//             for (let k = 0; k < condicoes_localidades[j][1].length; k++) {
+//                 p.textContent += iata(condicoes_localidades[j][1][k]);
+//                 if (k < condicoes_localidades[j][1].length - 1) {
+//                     p.textContent += '/';
+//                 }
+//             }
+//             td2.appendChild(p);
+//             tr.appendChild(td2);
+//         }
+//     }
+//     document.getElementById('resultado').appendChild(tabela);
+// }
+
+
+const imprimeTabela = function(fir,previsao1,previsao2,previsao3){
     let tabela = document.createElement('table');
     tabela.classList.add('coordenacao');
-    // Criar cabeçalho
+    // cabeçalho
     let cabecalho = document.createElement('tr');
-    let th1 = document.createElement('th');
-    th1.textContent = 'TMA/FIR';
-    cabecalho.appendChild(th1);
-    let th2 = document.createElement('th');
-    let horarios = '';
-    if (periodo === 'inicio') horarios = horas_inicio;
-    if (periodo === 'meio') horarios = horas_meio;
-    if (periodo === 'fim') horarios = horas_fim;
-    horarios = horarios.replace('-',' UTC ÀS ');
-    th2.textContent = 'PREVISÕES - ' + horarios + ' UTC';
-    cabecalho.appendChild(th2);
-    let aviso = document.createElement('p');
-    aviso.textContent = 'PREVISÕES OBTIDAS ATRAVÉS DE PROGNÓSTICOS DIVULGADOS (TAF) E DO PREVISOR DO CGNA, PODENDO HAVER ALTERAÇÕES, AS QUAIS SERÃO INFORMADAS PELA MENSAGEM DE TEMPO REAL';
-    aviso.classList.add('aviso_de_responsabilidade')
-    th2.appendChild(aviso);
+    let th = document.createElement('th');
+    th.setAttribute('colspan',3);
+    th.textContent = 'PREVISÕES'
+    cabecalho.appendChild(th);
     tabela.appendChild(cabecalho);
-    // Cria as linhas baseadas em cada grupo. O índice começa em 1 pois pula a chave 'nao_significativa' para gerar a string de
-    // "Sem previsão significativa" corretamente
-    for (let i = 0; i < GRUPOS.length; i++) {
-        // nova linha
-        let tr = document.createElement('tr');
-        tabela.appendChild(tr);
-        // celula com o nome do grupo
-        let td1 = document.createElement('td');
-        td1.classList.add('coluna_fir')
-        let grupo = GRUPOS[i][0].toUpperCase();
-        td1.textContent = grupo;
-        tr.appendChild(td1);
-        // celula com a condição meteorológica
-        let td2 = document.createElement('td');
-        let condicoes_localidades = Object.entries(briefing[GRUPOS[i][0]]);
-        for (let j = 0; j < condicoes_localidades.length; j++) {
-            if (condicoes_localidades[j][0] === 'nao_significativa' && condicoes_localidades[j][1].length === 0) continue
-            let p = document.createElement('p');
-            (condicoes_localidades[j][0] === 'nao_significativa') ? p.textContent = 'Sem previsão significativa para ': p.textContent = 'Previsão de ' + condicoes_localidades[j][0] + ' para ';
-            for (let k = 0; k < condicoes_localidades[j][1].length; k++) {
-                p.textContent += iata(condicoes_localidades[j][1][k]);
-                if (k < condicoes_localidades[j][1].length - 1) {
-                    p.textContent += '/';
-                }
-            }
-            td2.appendChild(p);
-            tr.appendChild(td2);
-        }
-    }
+    // linhas
+    let tr1 = document.createElement('tr');
+    let tr2 = document.createElement('tr');
+    let tr3 = document.createElement('tr');
+    // fir
+    let td_fir = document.createElement('td');
+    td_fir.setAttribute('rowspan',3);
+    td_fir.classList.add('td_fir');
+    td_fir.textContent = fir;
+    tr1.appendChild(td_fir);
+    // periodo 1
+    let td_horarios1 = document.createElement('td')
+    td_horarios1.textContent = horas_inicio;
+    tr1.appendChild(td_horarios1);
+    let td_previsao1 = document.createElement('td');
+    td_previsao1.classList.add('previsoes');
+    td_previsao1.innerHTML = previsao1;
+    tr1.appendChild(td_previsao1);
+    tabela.appendChild(tr1);
+    //periodo 2
+    let td_horarios2 = document.createElement('td')
+    td_horarios2.textContent = horas_meio;
+    tr2.appendChild(td_horarios2);
+    let td_previsao2 = document.createElement('td');
+    td_previsao2.classList.add('previsoes');
+    td_previsao2.innerHTML = previsao2;
+    tr2.appendChild(td_previsao2);
+    tabela.appendChild(tr2);
+    //periodo 3
+    let td_horarios3 = document.createElement('td')
+    td_horarios3.textContent = horas_fim;
+    tr3.appendChild(td_horarios3);
+    let td_previsao3 = document.createElement('td');
+    td_previsao3.classList.add('previsoes');
+    td_previsao3.innerHTML = previsao3;
+    tr3.appendChild(td_previsao3);
+    tabela.appendChild(tr3);
+    // adicionando ao resultado
     document.getElementById('resultado').appendChild(tabela);
 }
 
 const imprimeBriefing = function (){
     limpaTabela();
-    imprimePeriodo('inicio');
-    imprimePeriodo('meio');
-    imprimePeriodo('fim');
+    const previsoes = [gerarBriefing('inicio') ,gerarBriefing('meio'), gerarBriefing('fim')];
+    //TMA-RJ
+    let previsao_tmarj_1 = [];
+    if(previsoes[0]['tma-rj'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[0]['tma-rj'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_tmarj_1.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[0]['tma-rj'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_tmarj_1.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_tmarj_1 = previsao_tmarj_1.join('<br>');
+    let previsao_tmarj_2 = [];
+    if(previsoes[1]['tma-rj'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[1]['tma-rj'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_tmarj_2.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[1]['tma-rj'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_tmarj_2.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_tmarj_2 = previsao_tmarj_2.join('<br>');
+    let previsao_tmarj_3 = [];
+    if(previsoes[2]['tma-rj'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[2]['tma-rj'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_tmarj_3.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[2]['tma-rj'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_tmarj_3.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_tmarj_3 = previsao_tmarj_3.join('<br>');
+    imprimeTabela('TMA-RJ',previsao_tmarj_1,previsao_tmarj_2,previsao_tmarj_3);
+
+    //TMA-SP
+    let previsao_tmasp_1 = [];
+    if(previsoes[0]['tma-sp'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[0]['tma-sp'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_tmasp_1.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[0]['tma-sp'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_tmasp_1.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_tmasp_1 = previsao_tmasp_1.join('<br>');
+    let previsao_tmasp_2 = [];
+    if(previsoes[1]['tma-sp'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[1]['tma-sp'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_tmasp_2.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[1]['tma-sp'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_tmasp_2.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_tmasp_2 = previsao_tmasp_2.join('<br>');
+    let previsao_tmasp_3 = [];
+    if(previsoes[2]['tma-sp'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[2]['tma-sp'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_tmasp_3.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[2]['tma-sp'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_tmasp_3.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_tmasp_3 = previsao_tmasp_3.join('<br>');
+    imprimeTabela('TMA-SP',previsao_tmasp_1,previsao_tmasp_2,previsao_tmasp_3);
+
+    //fir-az
+    let previsao_firaz_1 = [];
+    if(previsoes[0]['fir-az'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[0]['fir-az'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_firaz_1.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[0]['fir-az'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_firaz_1.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_firaz_1 = previsao_firaz_1.join('<br>');
+    let previsao_firaz_2 = [];
+    if(previsoes[1]['fir-az'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[1]['fir-az'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_firaz_2.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[1]['fir-az'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_firaz_2.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_firaz_2 = previsao_firaz_2.join('<br>');
+    let previsao_firaz_3 = [];
+    if(previsoes[2]['fir-az'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[2]['fir-az'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_firaz_3.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[2]['fir-az'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_firaz_3.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_firaz_3 = previsao_firaz_3.join('<br>');
+    imprimeTabela('FIR-AZ',previsao_firaz_1,previsao_firaz_2,previsao_firaz_3);
+
+    //fir-bs
+    let previsao_firbs_1 = [];
+    if(previsoes[0]['fir-bs'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[0]['fir-bs'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_firbs_1.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[0]['fir-bs'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_firbs_1.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_firbs_1 = previsao_firbs_1.join('<br>');
+    let previsao_firbs_2 = [];
+    if(previsoes[1]['fir-bs'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[1]['fir-bs'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_firbs_2.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[1]['fir-bs'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_firbs_2.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_firbs_2 = previsao_firbs_2.join('<br>');
+    let previsao_firbs_3 = [];
+    if(previsoes[2]['fir-bs'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[2]['fir-bs'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_firbs_3.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[2]['fir-bs'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_firbs_3.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_firbs_3 = previsao_firbs_3.join('<br>');
+    imprimeTabela('FIR-BS',previsao_firbs_1,previsao_firbs_2,previsao_firbs_3);
+
+    //fir-cw
+    let previsao_fircw_1 = [];
+    if(previsoes[0]['fir-cw'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[0]['fir-cw'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_fircw_1.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[0]['fir-cw'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_fircw_1.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_fircw_1 = previsao_fircw_1.join('<br>');
+    let previsao_fircw_2 = [];
+    if(previsoes[1]['fir-cw'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[1]['fir-cw'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_fircw_2.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[1]['fir-cw'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_fircw_2.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_fircw_2 = previsao_fircw_2.join('<br>');
+    let previsao_fircw_3 = [];
+    if(previsoes[2]['fir-cw'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[2]['fir-cw'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_fircw_3.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[2]['fir-cw'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_fircw_3.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_fircw_3 = previsao_fircw_3.join('<br>');
+    imprimeTabela('FIR-CW',previsao_fircw_1,previsao_fircw_2,previsao_fircw_3);
+
+    //fir-re
+    let previsao_firre_1 = [];
+    if(previsoes[0]['fir-re'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[0]['fir-re'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_firre_1.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[0]['fir-re'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_firre_1.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_firre_1 = previsao_firre_1.join('<br>');
+    let previsao_firre_2 = [];
+    if(previsoes[1]['fir-re'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[1]['fir-re'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_firre_2.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[1]['fir-re'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_firre_2.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_firre_2 = previsao_firre_2.join('<br>');
+    let previsao_firre_3 = [];
+    if(previsoes[2]['fir-re'].nao_significativa.length > 0){
+        let bases = []
+        previsoes[2]['fir-re'].nao_significativa.forEach(base => bases.push(iata(base)))
+        bases = bases.join('/');
+        previsao_firre_3.push('Sem previsão significativa para ' + bases);
+    }
+    for(let[previsao,localidades] of Object.entries(previsoes[2]['fir-re'])){
+        if(previsao !== 'nao_significativa'){
+            let bases = [];
+            localidades.forEach(localidade => bases.push(iata(localidade)));
+            bases = bases.join('/');
+            previsao_firre_3.push('Previsão de ' + previsao + ' para ' + bases);
+        }
+    }
+    previsao_firre_3 = previsao_firre_3.join('<br>');
+    imprimeTabela('FIR-RE',previsao_firre_1,previsao_firre_2,previsao_firre_3);
 }
 
 // Limpa a tabela para nova exibição
