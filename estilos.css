@@ -80,7 +80,7 @@ table {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.coordenacao > tr > th {
+.coordenacao > tr > th, .coordenacao > tr > .td_fir {
     background-color: rgb(16, 37, 63);
     color: white;
 }
@@ -98,7 +98,7 @@ th, td{
     text-align: center;
 }
 
-.abr > tr > th {
+.abr > tr > th, .abr > tr > .td_fir {
     background-color: rgb(0, 0, 222);
     color: white;
     font-family: 'Intro Bold';
@@ -110,6 +110,10 @@ th, td{
 
 .abr > tr:nth-child(even) {
     background-color: rgb(222, 235, 247);
+}
+
+.td_fir {
+    width: 100px;
 }
 
 .coluna_fir{
@@ -133,4 +137,9 @@ p {
     font-size: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin-right: 10px;
+}
+
+.previsoes{
+    text-align: left;
+    width: 905px;
 }
